@@ -1,0 +1,53 @@
+---
+import { getCollection, render } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+import { categoryIcon, readTime, byDateDesc, formatDate } from '../../utils/journal';
+
+export async function getStaticPaths() {
+  const entries = (await getCollection('journal')).sort(byDateDesc);
+  return entries.map((entry, i) => ({
+    params: { slug: entry.data.slug },
+    props: { entry, index: i, entries },
+  }));
+}
+
+const { entry, index, entries } = Astro.props;
+const { Content } = await render(entry);
+const prev = entries[index - 1];
+const next = entries[index + 1];
+const articleNumber = String(index + 1).padStart(3, '0');
+---
+<Layout title={`${entry.data.title} — Pen & Paper Labs`} active="Journal">
+
+<div class="post-crumb"><a href="/journal">Journal</a> / <a href="/journal">{entry.data.category}</a> / {entry.data.title}</div>
+
+<main>
+  <article>
+    <header class="post-head">
+      <span class="no">No. PPL·LOG·{articleNumber}</span>
+      <span class="cat"><svg class="ico"><use href={`#${categoryIcon[entry.data.category]}`}/></svg>{entry.data.category}</span>
+      <h1 class="display" style="text-transform:none;">{entry.data.title}</h1>
+      <div class="meta">
+        <span>{formatDate(entry.data.date)}</span>
+        <span>{readTime(entry.body ?? '')} read</span>
+        <span>By <b>{entry.data.author}</b></span>
+      </div>
+    </header>
+
+    <div class="post-hero"><span class="stamp">FIG.0 — {entry.data.title}</span></div>
+
+    <div class="post-body">
+      <Content />
+    </div>
+
+    <nav class="post-nav">
+      {prev ? (
+        <a href={`/journal/${prev.data.slug}`}><span class="lbl">← Previous</span><span class="ttl">{prev.data.title}</span></a>
+      ) : <span />}
+      {next ? (
+        <a href={`/journal/${next.data.slug}`}><span class="lbl">Next →</span><span class="ttl">{next.data.title}</span></a>
+      ) : <span />}
+    </nav>
+  </article>
+</main>
+</Layout>

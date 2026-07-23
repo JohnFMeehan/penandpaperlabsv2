@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pen &amp; Paper Labs — Shop</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .page-head {
+    display: grid; grid-template-columns: 1fr auto; align-items: end;
+    padding: clamp(24px,5vw,56px) var(--gut) 22px; border-bottom: 1px solid var(--line);
+  }
+  .page-head h1 { font-size: clamp(46px,11vw,140px); }
+  .page-head .note { font-family:"SF Mono",Menlo,monospace; font-size:11px; color:var(--grey); text-transform:uppercase; letter-spacing:0.08em; text-align:right; }
+
+  .filters {
+    display: flex; border-bottom: 1px solid var(--line);
+    font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; overflow-x:auto;
+  }
+  .filters button {
+    border:none; border-right:1px solid var(--faint); background:var(--paper);
+    padding:12px 18px; cursor:pointer; white-space:nowrap; color:var(--grey);
+    font-family:inherit; font-size:inherit; letter-spacing:inherit;
+  }
+  .filters button.on, .filters button:hover { background:var(--ink); color:var(--paper); }
+  .filters .spacer { flex:1; border-right:none; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .card { border-right:1px solid var(--line); border-bottom:1px solid var(--line); position: relative; }
+  .card:nth-child(3n) { border-right:none; }
+  .card a { display:block; }
+  .swatch {
+    aspect-ratio: 4/5; display:flex; align-items:center; justify-content:center;
+    border-bottom:1px solid var(--faint); position:relative; overflow:hidden;
+  }
+  .s1 { background-image: repeating-linear-gradient(45deg,#f2f2f2 0 12px,#fff 12px 24px); }
+  .s2 { background-image: repeating-linear-gradient(0deg,#eee 0 7px,#fff 7px 14px); }
+  .s3 { background-image: radial-gradient(circle at 50% 45%, #e6e6e6 0 28%, #fff 29%); }
+  .s4 { background-image: repeating-linear-gradient(90deg,#ededed 0 3px,#fff 3px 16px); }
+  .s5 { background: conic-gradient(from 0deg, #f0f0f0, #fff, #ededed, #fff, #f0f0f0); }
+  .s6 { background-image: repeating-linear-gradient(-45deg,#efefef 0 9px,#fff 9px 18px); }
+  .glyph { font-size: 72px; font-weight:800; opacity:0.12; }
+  .card:hover .swatch { background: var(--ink); }
+  .card:hover .glyph { color: var(--paper); opacity:0.85; }
+  .badge {
+    position:absolute; top:10px; left:10px; font-family:"SF Mono",Menlo,monospace;
+    font-size:9px; text-transform:uppercase; letter-spacing:0.08em;
+    background:var(--ink); color:var(--paper); padding:3px 7px;
+  }
+  .badge.out { background:var(--paper); color:var(--ink); border:1px solid var(--ink); }
+  .cap { padding: 12px 16px 16px; }
+  .cap .row1 { display:flex; justify-content:space-between; align-items:baseline; }
+  .cap .name { font-weight:600; font-size:15px; }
+  .cap .price { font-family:"SF Mono",Menlo,monospace; font-size:13px; }
+  .cap .typ { font-family:"SF Mono",Menlo,monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--grey); margin-top:4px; }
+
+  @media (max-width: 860px){ .grid{grid-template-columns:repeat(2,1fr);} .card:nth-child(3n){border-right:1px solid var(--line);} .card:nth-child(2n){border-right:none;} }
+  @media (max-width: 520px){ .grid{grid-template-columns:1fr;} .card{border-right:none;} }
+</style>
+</head>
+<body>
+<div class="frame"></div>
+
+<header class="nav">
+  <a class="brand" href="index.html"><span class="blink">✦</span><span>PEN &amp; PAPER LABS</span></a>
+  <nav class="links">
+    <a href="index.html">Index</a>
+    <a href="shop.html" class="active">Shop</a>
+    <a href="blog.html">Journal</a>
+    <a href="about.html">Studio</a>
+    <a href="shop.html" class="cart">Cart (0)</a>
+  </nav>
+</header>
+
+<main>
+  <div class="page-head">
+    <h1 class="display">Shop</h1>
+    <div class="note">18 products in stock<br>Ships worldwide · 2–4 days</div>
+  </div>
+
+  <div class="filters">
+    <button class="on">All</button>
+    <button>Prints &amp; Posters</button>
+    <button>Stationery</button>
+    <button>Built Objects</button>
+    <button>Under $25</button>
+    <span class="spacer"></span>
+    <button>↓ Featured</button>
+  </div>
+
+  <div class="grid">
+    <div class="card"><a href="product.html">
+      <div class="swatch s1"><span class="badge">New</span><span class="glyph">▲</span></div>
+      <div class="cap"><div class="row1"><span class="name">Riso Print №03</span><span class="price">$38</span></div><div class="typ">Print · A2 · 2-color</div></div>
+    </a></div>
+    <div class="card"><a href="product.html">
+      <div class="swatch s2"><span class="glyph">▤</span></div>
+      <div class="cap"><div class="row1"><span class="name">Grid Notebook</span><span class="price">$18</span></div><div class="typ">Stationery · A5 · 120pp</div></div>
+    </a></div>
+    <div class="card"><a href="product.html">
+      <div class="swatch s3"><span class="badge">Kit</span><span class="glyph">◉</span></div>
+      <div class="cap"><div class="row1"><span class="name">Desk Clock Kit</span><span class="price">$64</span></div><div class="typ">Built · Solder-it-yourself</div></div>
+    </a></div>
+    <div class="card"><a href="product.html">
+      <div class="swatch s4"><span class="glyph">✚</span></div>
+      <div class="cap"><div class="row1"><span class="name">Type Poster A1</span><span class="price">$45</span></div><div class="typ">Print · A1 · Offset</div></div>
+    </a></div>
+    <div class="card"><a href="product.html">
+      <div class="swatch s5"><span class="glyph">◐</span></div>
+      <div class="cap"><div class="row1"><span class="name">Enamel Pin Set</span><span class="price">$22</span></div><div class="typ">Built · Set of 3</div></div>
+    </a></div>
+    <div class="card"><a href="product.html">
+      <div class="swatch s6"><span class="badge out">Sold out</span><span class="glyph">▦</span></div>
+      <div class="cap"><div class="row1"><span class="name">Dot Grid Cards</span><span class="price">$14</span></div><div class="typ">Stationery · Pack of 10</div></div>
+    </a></div>
+    <div class="card"><a href="product.html">
+      <div class="swatch s2"><span class="glyph">◑</span></div>
+      <div class="cap"><div class="row1"><span class="name">PCB Bookmark</span><span class="price">$12</span></div><div class="typ">Built · Etched brass</div></div>
+    </a></div>
+    <div class="card"><a href="product.html">
+      <div class="swatch s1"><span class="glyph">◆</span></div>
+      <div class="cap"><div class="row1"><span class="name">Riso Print №02</span><span class="price">$38</span></div><div class="typ">Print · A2 · 3-color</div></div>
+    </a></div>
+    <div class="card"><a href="product.html">
+      <div class="swatch s3"><span class="badge">Kit</span><span class="glyph">⬡</span></div>
+      <div class="cap"><div class="row1"><span class="name">LED Matrix Sign</span><span class="price">$58</span></div><div class="typ">Built · 8×8 · USB-C</div></div>
+    </a></div>
+  </div>
+</main>
+
+<footer>
+  <div><strong style="color:var(--ink);">PEN &amp; PAPER LABS©</strong><br>Made things, written down.</div>
+  <div><a href="shop.html">Shop</a><br><a href="blog.html">Journal</a><br><a href="about.html">Studio</a></div>
+  <div><a href="#">Instagram ↗</a><br><a href="#">GitHub ↗</a><br><a href="#">Newsletter ↗</a></div>
+  <div>© 2026 — All rights<br>reserved. Bilbao/BK.</div>
+</footer>
+</body>
+</html>

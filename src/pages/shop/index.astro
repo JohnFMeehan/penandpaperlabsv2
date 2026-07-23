@@ -1,0 +1,147 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getProducts } from '../../data/products';
+
+const products = await getProducts();
+const mediumIcon: Record<string, string> = { Physical: 'i-physical', Digital: 'i-digital', Hybrid: 'i-hybrid' };
+const domainIcon: Record<string, string> = { HW: 'i-hw', SW: 'i-sw', XR: 'i-xr', RES: 'i-res', PD: 'i-pd', LIFE: 'i-life' };
+---
+<Layout title="Pen &amp; Paper Labs — Shop" active="Shop">
+<style>
+  .page-head {
+    display: grid; grid-template-columns: 1fr auto; align-items: end;
+    padding: clamp(24px,5vw,56px) var(--gut) 22px; border-bottom: 1px solid var(--line);
+  }
+  .page-head h1 { font-size: clamp(46px,11vw,140px); }
+  .page-head .note { font-family:"SF Mono",Menlo,monospace; font-size:11px; color:var(--grey); text-transform:uppercase; letter-spacing:0.08em; text-align:right; }
+
+  .filters {
+    display: flex; border-bottom: 1px solid var(--line);
+    font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; overflow-x:auto;
+  }
+  .filters button {
+    border:none; border-right:1px solid var(--faint); background:var(--paper);
+    padding:12px 18px; cursor:pointer; white-space:nowrap; color:var(--grey);
+    font-family:inherit; font-size:inherit; letter-spacing:inherit;
+  }
+  .filters button.on, .filters button:hover { background:var(--ink); color:var(--paper); }
+  .filters .spacer { flex:1; border-right:none; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .card { border-right:1px solid var(--line); border-bottom:1px solid var(--line); position: relative; }
+  .card:nth-child(3n) { border-right:none; }
+  .card a { display:block; }
+  .swatch {
+    aspect-ratio: 4/5; display:flex; align-items:center; justify-content:center;
+    border-bottom:1px solid var(--faint); position:relative; overflow:hidden;
+  }
+  .s1 { background-image: repeating-linear-gradient(45deg,#f2f2f2 0 12px,#fff 12px 24px); }
+  .s2 { background-image: repeating-linear-gradient(0deg,#eee 0 7px,#fff 7px 14px); }
+  .s3 { background-image: radial-gradient(circle at 50% 45%, #e6e6e6 0 28%, #fff 29%); }
+  .s4 { background-image: repeating-linear-gradient(90deg,#ededed 0 3px,#fff 3px 16px); }
+  .s5 { background: conic-gradient(from 0deg, #f0f0f0, #fff, #ededed, #fff, #f0f0f0); }
+  .s6 { background-image: repeating-linear-gradient(-45deg,#efefef 0 9px,#fff 9px 18px); }
+  .card:hover .swatch { background: var(--ink); }
+  .badge {
+    position:absolute; top:10px; left:10px; font-family:"SF Mono",Menlo,monospace;
+    font-size:9px; text-transform:uppercase; letter-spacing:0.08em;
+    background:var(--ink); color:var(--paper); padding:3px 7px;
+  }
+  .badge.out { background:var(--paper); color:var(--ink); border:1px solid var(--ink); }
+  .cap { padding: 12px 16px 16px; }
+  .cap .row1 { display:flex; justify-content:space-between; align-items:baseline; }
+  .cap .name { font-weight:600; font-size:15px; }
+  .cap .price { font-family:"SF Mono",Menlo,monospace; font-size:13px; }
+  .cap .typ { font-family:"SF Mono",Menlo,monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--grey); margin-top:6px; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+  .cap .typ .dom { display:inline-flex; gap:9px; color:var(--ink); flex:none; }
+  .cap .typ .dom .ico { width:16px; height:16px; }
+
+  @media (max-width: 860px){ .grid{grid-template-columns:repeat(2,1fr);} .card:nth-child(3n){border-right:1px solid var(--line);} .card:nth-child(2n){border-right:none;} }
+  @media (max-width: 520px){ .grid{grid-template-columns:1fr;} .card{border-right:none;} }
+</style>
+
+<main>
+  <div class="page-head">
+    <h1 class="display">Shop</h1>
+    <div class="note">{products.length} products in stock<br>Ships worldwide · 2–4 days</div>
+  </div>
+
+  <div class="filters" id="shopFilters">
+    <button class="on" data-filter="all">All</button>
+    <button data-filter="Prints &amp; Posters"><svg class="ico"><use href="#i-print"/></svg>Prints &amp; Posters</button>
+    <button data-filter="Stationery"><svg class="ico"><use href="#i-note"/></svg>Stationery</button>
+    <button data-filter="Built Objects"><svg class="ico"><use href="#i-physical"/></svg>Built Objects</button>
+    <button data-filter="under25"><svg class="ico"><use href="#i-tag"/></svg>Under $25</button>
+    <span class="spacer"></span>
+    <button id="shopSort" data-sort="featured">↓ Featured</button>
+  </div>
+
+  <div class="grid" id="shopGrid">
+    {products.map((product, i) => (
+      <div class="card" data-category={product.category} data-price={product.price} data-order={i}><a href={`/shop/${product.handle}`}>
+        <div class={`swatch ${product.swatch}`}>
+          {product.badge && <span class={`badge${product.badge === 'Sold out' ? ' out' : ''}`}>{product.badge}</span>}
+        </div>
+        <div class="cap">
+          <div class="row1"><span class="name">{product.name}</span><span class="price">${product.price}</span></div>
+          <div class="typ">
+            <span>{product.typeLine}</span>
+            <span class="dom">
+              <svg class="ico"><use href={`#${mediumIcon[product.medium]}`}/></svg>
+              <svg class="ico"><use href={`#${domainIcon[product.domain]}`}/></svg>
+            </span>
+          </div>
+        </div>
+      </a></div>
+    ))}
+  </div>
+</main>
+
+<script>
+  const filtersEl = document.getElementById('shopFilters')!;
+  const gridEl = document.getElementById('shopGrid')!;
+  const sortBtn = document.getElementById('shopSort') as HTMLButtonElement;
+  const cards = Array.from(gridEl.querySelectorAll<HTMLElement>('.card'));
+  let activeFilter = 'all';
+
+  const sortLabels: Record<string, string> = {
+    featured: '↓ Featured',
+    'price-asc': '↑ Price: Low to High',
+    'price-desc': '↓ Price: High to Low',
+  };
+  const sortCycle = ['featured', 'price-asc', 'price-desc'];
+
+  function applyFilter() {
+    for (const card of cards) {
+      const category = card.dataset.category;
+      const price = Number(card.dataset.price);
+      const matches = activeFilter === 'all' || (activeFilter === 'under25' ? price < 25 : category === activeFilter);
+      card.style.display = matches ? '' : 'none';
+    }
+  }
+
+  function applySort(mode: string) {
+    const sorted = [...cards].sort((a, b) => {
+      if (mode === 'price-asc') return Number(a.dataset.price) - Number(b.dataset.price);
+      if (mode === 'price-desc') return Number(b.dataset.price) - Number(a.dataset.price);
+      return Number(a.dataset.order) - Number(b.dataset.order);
+    });
+    for (const card of sorted) gridEl.appendChild(card);
+  }
+
+  filtersEl.querySelectorAll<HTMLButtonElement>('button[data-filter]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      activeFilter = btn.dataset.filter!;
+      filtersEl.querySelectorAll('button[data-filter]').forEach((b) => b.classList.toggle('on', b === btn));
+      applyFilter();
+    });
+  });
+
+  sortBtn.addEventListener('click', () => {
+    const next = sortCycle[(sortCycle.indexOf(sortBtn.dataset.sort!) + 1) % sortCycle.length];
+    sortBtn.dataset.sort = next;
+    sortBtn.textContent = sortLabels[next];
+    applySort(next);
+  });
+</script>
+</Layout>

@@ -1,0 +1,166 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../layouts/Layout.astro';
+import { getProducts } from '../data/products';
+import { categoryIcon, byDateDesc, formatDate } from '../utils/journal';
+
+const featuredProducts = (await getProducts()).slice(0, 4);
+const swatchClass: Record<string, string> = { s1: 'a', s2: 'b', s3: 'c', s4: 'd', s5: 'a', s6: 'b' };
+const productIcon: Record<string, string> = {
+  'riso-print-03': 'i-print',
+  'grid-notebook': 'i-note',
+  'desk-clock-kit': 'i-clock',
+  'type-poster-a1': 'i-type',
+};
+
+const journalEntries = (await getCollection('journal')).sort(byDateDesc);
+---
+<Layout title="Pen &amp; Paper Labs — Index" active="Index" showTagline>
+<style>
+  .hero {
+    border-bottom: 1px solid var(--line);
+    padding: clamp(28px, 6vw, 80px) var(--gut) clamp(20px, 4vw, 48px);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero .toprow {
+    display: flex; justify-content: space-between;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    font-size: 11px; color: var(--grey); margin-bottom: clamp(20px,5vw,60px);
+  }
+  .hero h1 {
+    font-size: clamp(58px, 19vw, 280px);
+  }
+  .hero h1 .amp { -webkit-text-stroke: 2px var(--ink); color: var(--paper); }
+  .hero .sub {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-top: clamp(18px, 3vw, 36px); gap: 24px; flex-wrap: wrap;
+  }
+  .hero .blurb { max-width: 38ch; font-size: 15px; }
+  .hero .ascii {
+    font-family: "SF Mono", Menlo, monospace; font-size: 10px; line-height: 1.1;
+    color: var(--grey); white-space: pre; user-select: none;
+  }
+  .split { display: grid; grid-template-columns: 1.1fr 1fr; }
+  .split > section { border-right: 1px solid var(--line); }
+  .split > section:last-child { border-right: none; }
+  .panel-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px var(--gut); border-bottom: 1px solid var(--line);
+    text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px;
+  }
+  .panel-head a { color: var(--grey); }
+  .panel-head a:hover { color: var(--ink); }
+
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; }
+  .tile { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .tile:nth-child(2n) { border-right: none; }
+  .tile a { display: block; padding: 0; }
+  .swatch {
+    aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center;
+    border-bottom: 1px solid var(--faint);
+    background-image: repeating-linear-gradient(45deg,#f4f4f4 0 10px,#fff 10px 20px);
+    position: relative;
+  }
+  .swatch.b { background-image: repeating-linear-gradient(0deg,#f0f0f0 0 6px,#fff 6px 12px); }
+  .swatch.c { background-image: radial-gradient(circle at 50% 50%, #e8e8e8 0 30%, #fff 31%); }
+  .swatch.d { background-image: repeating-linear-gradient(90deg,#eee 0 2px,#fff 2px 14px); }
+  .tile .cap {
+    display: flex; justify-content: space-between; padding: 10px 14px;
+    font-family: "SF Mono", Menlo, monospace; font-size: 11px; text-transform: uppercase;
+  }
+  .tile:hover .swatch { background: var(--ink); }
+  .tile:hover .glyph { color: var(--paper); opacity: 0.9; }
+  .tiles .pico { width: 52px; height: 52px; }
+  .tile:hover .pico { color: var(--paper); opacity: 0.9; }
+  .post .ttl .ico { margin-right: 8px; color: var(--grey); }
+  .post:hover .ttl .ico { color: var(--ink); }
+
+  .post {
+    display: grid; grid-template-columns: 64px 1fr auto; gap: 16px;
+    padding: 13px var(--gut); border-bottom: 1px solid var(--faint);
+    align-items: baseline;
+  }
+  .post:hover { background: #fafafa; }
+  .post .num { font-family: "SF Mono",Menlo,monospace; font-size: 11px; color: var(--grey); }
+  .post .ttl { font-size: 15px; }
+  .post .dt { font-family: "SF Mono",Menlo,monospace; font-size: 11px; color: var(--grey); white-space: nowrap; }
+
+  .strip {
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    overflow: hidden; white-space: nowrap; background: var(--ink); color: var(--paper);
+  }
+  .strip .run {
+    display: inline-block; padding: 11px 0;
+    font-family: "SF Mono",Menlo,monospace; font-size: 12px; text-transform: uppercase;
+    letter-spacing: 0.1em; animation: scroll 26s linear infinite;
+  }
+  .strip .run span { padding: 0 28px; }
+  @keyframes scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  @media (max-width: 860px){
+    .split { grid-template-columns: 1fr; }
+    .split > section { border-right:none; border-bottom:1px solid var(--line); }
+    .hero h1 .amp { -webkit-text-stroke: 1px var(--ink); }
+  }
+</style>
+
+<main>
+  <section class="hero">
+    <div class="toprow">
+      <span>[ Brooklyn / Internet ]</span>
+      <span>Prints · Paper Goods · Built Objects</span>
+      <span>EST. 2026</span>
+    </div>
+    <h1 class="display">PEN<span class="amp">&amp;</span>PAPER</h1>
+    <div class="sub">
+      <p class="blurb">A studio &amp; shop for things made with ink, paper, and a soldering iron. We design prints, stationery, and small built objects — and write about how they come to be.</p>
+      <pre class="ascii">  ┌───────────┐
+  │ ▟ ▙ ▟ ▙ ▟ │
+  │ MAKE/WRITE │
+  │ ▜ ▛ ▜ ▛ ▜ │
+  └───────────┘</pre>
+    </div>
+  </section>
+
+  <div class="strip">
+    <div class="run">
+      <span>NEW DROP — RISO PRINT SERIES №03</span><span>·</span><span>NOTEBOOK RESTOCK</span><span>·</span><span>OPEN-SOURCE DESK CLOCK KIT</span><span>·</span><span>FREE SHIPPING OVER $50</span><span>·</span>
+      <span>NEW DROP — RISO PRINT SERIES №03</span><span>·</span><span>NOTEBOOK RESTOCK</span><span>·</span><span>OPEN-SOURCE DESK CLOCK KIT</span><span>·</span><span>FREE SHIPPING OVER $50</span><span>·</span>
+    </div>
+  </div>
+
+  <div class="split">
+    <section>
+      <div class="panel-head">
+        <span>◆ From the Shop</span>
+        <a href="/shop">All products →</a>
+      </div>
+      <div class="tiles">
+        {featuredProducts.map((product) => (
+          <div class="tile"><a href={`/shop/${product.handle}`}>
+            <div class={`swatch ${swatchClass[product.swatch]}`}><svg class="pico"><use href={`#${productIcon[product.handle] ?? 'i-tag'}`}/></svg></div>
+            <div class="cap"><span>{product.name}</span><span>${product.price}</span></div>
+          </a></div>
+        ))}
+      </div>
+    </section>
+
+    <section>
+      <div class="panel-head">
+        <span>◆ From the Journal</span>
+        <a href="/journal">All entries →</a>
+      </div>
+      {journalEntries.map((entry, i) => (
+        <a href={`/journal/${entry.data.slug}`}>
+          <div class="post" style={i === journalEntries.length - 1 ? 'border-bottom:none;' : undefined}>
+            <span class="num">→{String(i + 1).padStart(2, '0')}</span>
+            <span class="ttl"><svg class="ico"><use href={`#${categoryIcon[entry.data.category]}`}/></svg>{entry.data.title}</span>
+            <span class="dt">{formatDate(entry.data.date)}</span>
+          </div>
+        </a>
+      ))}
+    </section>
+  </div>
+</main>
+</Layout>

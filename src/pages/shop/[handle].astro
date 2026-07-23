@@ -1,0 +1,223 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getProducts, getRelatedProducts, type Product } from '../../data/products';
+
+export async function getStaticPaths() {
+  const products = await getProducts();
+  return products.map((p) => ({
+    params: { handle: p.handle },
+    props: { product: p, related: getRelatedProducts(products, p) },
+  }));
+}
+
+const { product, related } = Astro.props as { product: Product; related: Product[] };
+
+const mediumIcon: Record<string, string> = { Physical: 'i-physical', Digital: 'i-digital', Hybrid: 'i-hybrid' };
+const domainIcon: Record<string, string> = { HW: 'i-hw', SW: 'i-sw', XR: 'i-xr', RES: 'i-res', PD: 'i-pd', LIFE: 'i-life' };
+const domains: Array<'HW' | 'SW' | 'XR' | 'RES' | 'PD' | 'LIFE'> = ['HW', 'SW', 'XR', 'RES', 'PD', 'LIFE'];
+const mediums: Array<'Physical' | 'Digital' | 'Hybrid'> = ['Physical', 'Digital', 'Hybrid'];
+---
+<Layout title={`Pen & Paper Labs — ${product.name}`} active="Shop">
+<style>
+  .crumb {
+    padding: 12px var(--gut); border-bottom: 1px solid var(--line);
+    font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:var(--grey);
+  }
+  .crumb a:hover { color: var(--ink); }
+
+  .product { display: grid; grid-template-columns: 1.15fr 1fr; }
+  .gallery { border-right: 1px solid var(--line); }
+  .main-img {
+    aspect-ratio: 1/1; display:flex; align-items:center; justify-content:center;
+    border-bottom: 1px solid var(--line);
+    background-image: radial-gradient(circle at 50% 45%, #e6e6e6 0 26%, #fff 27%);
+    position: relative;
+  }
+  .main-img .stamp {
+    position:absolute; bottom:14px; left:14px; font-family:"SF Mono",Menlo,monospace;
+    font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--grey);
+  }
+  .thumbs { display:grid; grid-template-columns: repeat(4,1fr); }
+  .thumb {
+    aspect-ratio:1/1; border-right:1px solid var(--faint); display:flex; align-items:center; justify-content:center;
+    cursor:pointer; font-size:26px; font-weight:800; opacity:0.18;
+  }
+  .thumb:last-child{border-right:none;}
+  .thumb.on, .thumb:hover { background:var(--ink); color:var(--paper); opacity:0.9; }
+
+  .info { padding: clamp(20px,3vw,40px) var(--gut); }
+  .info .typ { font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--grey); }
+  .info h1 { font-size: clamp(34px,5vw,56px); margin: 10px 0 6px; line-height:0.92; }
+  .info .price { font-family:"SF Mono",Menlo,monospace; font-size: 22px; margin: 14px 0; }
+  .info .desc { max-width: 46ch; margin: 18px 0; }
+  .specs { width:100%; border-collapse:collapse; margin: 18px 0; font-size:13px; }
+  .specs td { border-bottom:1px solid var(--faint); padding:9px 0; }
+  .specs td:first-child { font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:var(--grey); width:42%; }
+
+  .opts { display:flex; gap:0; margin:18px 0; }
+  .opts button {
+    border:1px solid var(--line); border-right:none; background:var(--paper);
+    padding:10px 16px; font-family:"SF Mono",Menlo,monospace; font-size:12px; cursor:pointer;
+  }
+  .opts button:last-child{border-right:1px solid var(--line);}
+  .opts button.on{ background:var(--ink); color:var(--paper); }
+
+  .buy { display:flex; gap:0; margin-top:8px; }
+  .qty { display:flex; border:1px solid var(--line); }
+  .qty button{ border:none; background:var(--paper); width:42px; cursor:pointer; font-size:16px; }
+  .qty button:hover{ background:var(--ink); color:var(--paper); }
+  .qty .n{ display:flex; align-items:center; justify-content:center; width:48px; border-left:1px solid var(--line); border-right:1px solid var(--line); font-family:"SF Mono",Menlo,monospace; }
+  .addcart { flex:1; }
+
+  .meta-line { margin-top:18px; font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:var(--grey); }
+
+  .rel-head { padding: 14px var(--gut); border-top:1px solid var(--line); border-bottom:1px solid var(--line); text-transform:uppercase; letter-spacing:0.08em; font-size:11px; font-family:"SF Mono",Menlo,monospace;}
+  .rel { display:grid; grid-template-columns: repeat(4,1fr); }
+  .rel .card{ border-right:1px solid var(--line); }
+  .rel .card:last-child{border-right:none;}
+  .rel .sw{ aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--faint); background-image:repeating-linear-gradient(45deg,#f2f2f2 0 12px,#fff 12px 24px); font-size:40px; font-weight:800; opacity:0.14;}
+  .rel .card:hover .sw{ background:var(--ink); color:var(--paper); opacity:0.85;}
+  .rel .cap{ display:flex; justify-content:space-between; padding:9px 12px; font-family:"SF Mono",Menlo,monospace; font-size:11px;}
+
+  .class-head { font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--ink); margin:26px 0 12px; padding-bottom:8px; border-bottom:1px solid var(--line); }
+  .medium-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .medium { border:1px solid var(--line); padding:18px 8px 14px; display:flex; flex-direction:column; align-items:center; gap:10px; position:relative; text-align:center; }
+  .medium .ico { width:26px; height:26px; }
+  .medium .ml { font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; }
+  .medium.on { background:var(--ink); color:var(--paper); }
+  .medium .chk { position:absolute; top:8px; right:8px; width:16px; height:16px; border-radius:50%; border:1px solid currentColor; display:flex; align-items:center; justify-content:center; }
+  .medium .chk .ico { width:9px; height:9px; stroke-width:2.4; }
+  .domain-row { display:grid; grid-template-columns:repeat(6,1fr); border:1px solid var(--line); margin-top:14px; }
+  .domain { display:flex; flex-direction:column; align-items:center; gap:7px; padding:13px 3px; border-right:1px solid var(--faint); color:var(--grey); }
+  .domain:last-child { border-right:none; }
+  .domain .ico { width:21px; height:21px; }
+  .domain .dl { font-family:"SF Mono",Menlo,monospace; font-size:9px; letter-spacing:0.06em; }
+  .domain.on { color:var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
+
+  @media (max-width:860px){ .product{grid-template-columns:1fr;} .gallery{border-right:none;border-bottom:1px solid var(--line);} .rel{grid-template-columns:repeat(2,1fr);} }
+</style>
+
+<div class="crumb"><a href="/shop">Shop</a> / <a href="/shop">{product.category}</a> / {product.name}</div>
+
+<main>
+  <div class="product">
+    <div class="gallery">
+      <div class="main-img"><span class="stamp">FIG.1 — {product.name}</span></div>
+      <div class="thumbs">
+        <div class="thumb on"></div>
+        <div class="thumb"></div>
+        <div class="thumb"></div>
+        <div class="thumb"></div>
+      </div>
+    </div>
+
+    <div class="info">
+      <div class="typ">{product.typeLine}</div>
+      <h1 class="display" style="text-transform:none;">{product.name}</h1>
+      <div class="price">${product.price.toFixed(2)}</div>
+      <p class="desc">{product.description}</p>
+
+      <table class="specs">
+        {product.specs.map((spec) => (
+          <tr><td>{spec.label}</td><td>{spec.value}</td></tr>
+        ))}
+      </table>
+
+      <div class="class-head">Medium — No. {product.productNumber}</div>
+      <div class="medium-row">
+        {mediums.map((m) => (
+          <div class={`medium${m === product.medium ? ' on' : ''}`}>
+            {m === product.medium && <span class="chk"><svg class="ico"><use href="#i-check"/></svg></span>}
+            <svg class="ico"><use href={`#${mediumIcon[m]}`}/></svg>
+            <span class="ml">{m}</span>
+          </div>
+        ))}
+      </div>
+
+      <div class="class-head">Domain Index</div>
+      <div class="domain-row">
+        {domains.map((d) => (
+          <div class={`domain${d === product.domain ? ' on' : ''}`}>
+            <svg class="ico"><use href={`#${domainIcon[d]}`}/></svg>
+            <span class="dl">{d}</span>
+          </div>
+        ))}
+      </div>
+
+      {product.variantOptions && (
+        <>
+          <div class="typ" style="margin-top:24px;">{product.variantOptions.label}</div>
+          <div class="opts" id="variantOpts">
+            {product.variantOptions.options.map((opt, i) => (
+              <button class={i === 0 ? 'on' : undefined}>{opt}</button>
+            ))}
+          </div>
+        </>
+      )}
+
+      <div class="buy">
+        <div class="qty" id="qtyStepper"><button type="button" id="qtyMinus">–</button><span class="n" id="qtyValue">1</span><button type="button" id="qtyPlus">+</button></div>
+        <button class="btn solid addcart" id="addToCart" data-variant-id={product.variantId ?? ''} data-price={product.price} disabled={product.badge === 'Sold out'}>Add to cart — ${product.price}</button>
+      </div>
+      <div class="meta-line">
+        {product.badge === 'Sold out' ? '✕ Sold out' : '✓ In stock · Ships in 2–4 days · Free shipping over $50'}
+      </div>
+      <div class="meta-line" id="cartStatus"></div>
+    </div>
+  </div>
+
+  <div class="rel-head">◆ You might also like</div>
+  <div class="rel">
+    {related.map((r) => (
+      <a href={`/shop/${r.handle}`}><div class="card"><div class="sw"></div><div class="cap"><span>{r.name}</span><span>${r.price}</span></div></div></a>
+    ))}
+  </div>
+</main>
+
+<script>
+  import { addToCart, isCartConfigured } from '../../lib/cart';
+
+  const qtyMinus = document.getElementById('qtyMinus')!;
+  const qtyPlus = document.getElementById('qtyPlus')!;
+  const qtyValue = document.getElementById('qtyValue')!;
+  const addBtn = document.getElementById('addToCart') as HTMLButtonElement;
+  const statusEl = document.getElementById('cartStatus')!;
+  const variantOpts = document.getElementById('variantOpts');
+
+  qtyMinus.addEventListener('click', () => {
+    qtyValue.textContent = String(Math.max(1, Number(qtyValue.textContent) - 1));
+  });
+  qtyPlus.addEventListener('click', () => {
+    qtyValue.textContent = String(Number(qtyValue.textContent) + 1);
+  });
+
+  // Visual-only for now: switching options doesn't yet change which Shopify
+  // variant gets added to cart (see the note at the top of src/lib/cart.ts).
+  variantOpts?.querySelectorAll('button').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      variantOpts.querySelectorAll('button').forEach((b) => b.classList.remove('on'));
+      btn.classList.add('on');
+    });
+  });
+
+  addBtn.addEventListener('click', async () => {
+    const variantId = addBtn.dataset.variantId;
+    if (!isCartConfigured() || !variantId) {
+      statusEl.textContent = 'Shopify not connected yet — add-to-cart will work once the store is live.';
+      return;
+    }
+    addBtn.disabled = true;
+    statusEl.textContent = 'Adding…';
+    try {
+      const quantity = Number(qtyValue.textContent);
+      await addToCart(variantId, quantity);
+      statusEl.textContent = '✓ Added to cart';
+      document.dispatchEvent(new CustomEvent('cart:updated'));
+    } catch (err) {
+      statusEl.textContent = err instanceof Error ? err.message : 'Could not add to cart.';
+    } finally {
+      addBtn.disabled = false;
+    }
+  });
+</script>
+</Layout>

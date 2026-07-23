@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pen &amp; Paper Labs — Desk Clock Kit</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .crumb {
+    padding: 12px var(--gut); border-bottom: 1px solid var(--line);
+    font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:var(--grey);
+  }
+  .crumb a:hover { color: var(--ink); }
+
+  .product { display: grid; grid-template-columns: 1.15fr 1fr; }
+  .gallery { border-right: 1px solid var(--line); }
+  .main-img {
+    aspect-ratio: 1/1; display:flex; align-items:center; justify-content:center;
+    border-bottom: 1px solid var(--line);
+    background-image: radial-gradient(circle at 50% 45%, #e6e6e6 0 26%, #fff 27%);
+    position: relative;
+  }
+  .main-img .glyph { font-size: 160px; font-weight:800; opacity:0.13; }
+  .main-img .stamp {
+    position:absolute; bottom:14px; left:14px; font-family:"SF Mono",Menlo,monospace;
+    font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--grey);
+  }
+  .thumbs { display:grid; grid-template-columns: repeat(4,1fr); }
+  .thumb {
+    aspect-ratio:1/1; border-right:1px solid var(--faint); display:flex; align-items:center; justify-content:center;
+    cursor:pointer; font-size:26px; font-weight:800; opacity:0.18;
+  }
+  .thumb:last-child{border-right:none;}
+  .thumb.on, .thumb:hover { background:var(--ink); color:var(--paper); opacity:0.9; }
+
+  .info { padding: clamp(20px,3vw,40px) var(--gut); }
+  .info .typ { font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--grey); }
+  .info h1 { font-size: clamp(34px,5vw,56px); margin: 10px 0 6px; line-height:0.92; }
+  .info .price { font-family:"SF Mono",Menlo,monospace; font-size: 22px; margin: 14px 0; }
+  .info .desc { max-width: 46ch; margin: 18px 0; }
+  .specs { width:100%; border-collapse:collapse; margin: 18px 0; font-size:13px; }
+  .specs td { border-bottom:1px solid var(--faint); padding:9px 0; }
+  .specs td:first-child { font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:var(--grey); width:42%; }
+
+  .opts { display:flex; gap:0; margin:18px 0; }
+  .opts button {
+    border:1px solid var(--line); border-right:none; background:var(--paper);
+    padding:10px 16px; font-family:"SF Mono",Menlo,monospace; font-size:12px; cursor:pointer;
+  }
+  .opts button:last-child{border-right:1px solid var(--line);}
+  .opts button.on{ background:var(--ink); color:var(--paper); }
+
+  .buy { display:flex; gap:0; margin-top:8px; }
+  .qty { display:flex; border:1px solid var(--line); }
+  .qty button{ border:none; background:var(--paper); width:42px; cursor:pointer; font-size:16px; }
+  .qty button:hover{ background:var(--ink); color:var(--paper); }
+  .qty .n{ display:flex; align-items:center; justify-content:center; width:48px; border-left:1px solid var(--line); border-right:1px solid var(--line); font-family:"SF Mono",Menlo,monospace; }
+  .addcart { flex:1; }
+
+  .meta-line { margin-top:18px; font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.06em; color:var(--grey); }
+
+  /* related */
+  .rel-head { padding: 14px var(--gut); border-top:1px solid var(--line); border-bottom:1px solid var(--line); text-transform:uppercase; letter-spacing:0.08em; font-size:11px; font-family:"SF Mono",Menlo,monospace;}
+  .rel { display:grid; grid-template-columns: repeat(4,1fr); }
+  .rel .card{ border-right:1px solid var(--line); }
+  .rel .card:last-child{border-right:none;}
+  .rel .sw{ aspect-ratio:1/1; display:flex; align-items:center; justify-content:center; border-bottom:1px solid var(--faint); background-image:repeating-linear-gradient(45deg,#f2f2f2 0 12px,#fff 12px 24px); font-size:40px; font-weight:800; opacity:0.14;}
+  .rel .card:hover .sw{ background:var(--ink); color:var(--paper); opacity:0.85;}
+  .rel .cap{ display:flex; justify-content:space-between; padding:9px 12px; font-family:"SF Mono",Menlo,monospace; font-size:11px;}
+
+  /* classification block (medium + domain index) */
+  .class-head { font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.12em; color:var(--ink); margin:26px 0 12px; padding-bottom:8px; border-bottom:1px solid var(--line); }
+  .medium-row { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+  .medium { border:1px solid var(--line); padding:18px 8px 14px; display:flex; flex-direction:column; align-items:center; gap:10px; position:relative; text-align:center; }
+  .medium .ico { width:26px; height:26px; }
+  .medium .ml { font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.08em; }
+  .medium.on { background:var(--ink); color:var(--paper); }
+  .medium .chk { position:absolute; top:8px; right:8px; width:16px; height:16px; border-radius:50%; border:1px solid currentColor; display:flex; align-items:center; justify-content:center; }
+  .medium .chk .ico { width:9px; height:9px; stroke-width:2.4; }
+  .domain-row { display:grid; grid-template-columns:repeat(6,1fr); border:1px solid var(--line); margin-top:14px; }
+  .domain { display:flex; flex-direction:column; align-items:center; gap:7px; padding:13px 3px; border-right:1px solid var(--faint); color:var(--grey); }
+  .domain:last-child { border-right:none; }
+  .domain .ico { width:21px; height:21px; }
+  .domain .dl { font-family:"SF Mono",Menlo,monospace; font-size:9px; letter-spacing:0.06em; }
+  .domain.on { color:var(--ink); box-shadow: inset 0 0 0 2px var(--ink); }
+
+  @media (max-width:860px){ .product{grid-template-columns:1fr;} .gallery{border-right:none;border-bottom:1px solid var(--line);} .rel{grid-template-columns:repeat(2,1fr);} }
+</style>
+</head>
+<body>
+<div class="frame"></div>
+
+<svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+  <symbol id="i-physical" viewBox="0 0 24 24"><path d="M4 8l8-4 8 4v8l-8 4-8-4V8z"/><path d="M4 8l8 4 8-4M12 12v8"/></symbol>
+  <symbol id="i-digital" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="12" rx="1.5"/><path d="M7 13l3-3 2 2 4-4M9 21h6M12 17v4"/></symbol>
+  <symbol id="i-hybrid" viewBox="0 0 24 24"><rect x="4" y="7.5" width="8" height="9" rx="1"/><path d="M13 7l6 1.4v7L13 17z"/></symbol>
+  <symbol id="i-hw" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5" rx="0.6"/><path d="M9 6V3M12 6V3M15 6V3M9 21v-3M12 21v-3M15 21v-3M6 9H3M6 12H3M6 15H3M21 9h-3M21 12h-3M21 15h-3"/></symbol>
+  <symbol id="i-sw" viewBox="0 0 24 24"><path d="M8.5 8L4.5 12l4 4M15.5 8l4 4-4 4M13.5 6l-3 12"/></symbol>
+  <symbol id="i-xr" viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="8" rx="3.2"/><circle cx="8.5" cy="12" r="2.1"/><circle cx="15.5" cy="12" r="2.1"/><path d="M11 12h2"/></symbol>
+  <symbol id="i-res" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M15.6 15.6L20 20M9 12.5V11M11 12.5V9.5M13 12.5v-2.5"/></symbol>
+  <symbol id="i-pd" viewBox="0 0 24 24"><rect x="6" y="4" width="12" height="16" rx="1.5"/><path d="M9 9h6M9 12h6M9 15h4"/></symbol>
+  <symbol id="i-life" viewBox="0 0 24 24"><path d="M12 3.5c3 4 5 6.4 5 9.4a5 5 0 01-10 0c0-3 2-5.4 5-9.4z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12l5 5L20 6"/></symbol>
+</svg>
+
+<header class="nav">
+  <a class="brand" href="index.html"><span class="blink">✦</span><span>PEN &amp; PAPER LABS</span></a>
+  <nav class="links">
+    <a href="index.html">Index</a>
+    <a href="shop.html">Shop</a>
+    <a href="blog.html">Journal</a>
+    <a href="about.html">Studio</a>
+    <a href="shop.html" class="cart">Cart (0)</a>
+  </nav>
+</header>
+
+<div class="crumb"><a href="shop.html">Shop</a> / <a href="shop.html">Built Objects</a> / Desk Clock Kit</div>
+
+<main>
+  <div class="product">
+    <div class="gallery">
+      <div class="main-img"><span class="stamp">FIG.1 — Assembled unit</span></div>
+      <div class="thumbs">
+        <div class="thumb on"></div>
+        <div class="thumb"></div>
+        <div class="thumb"></div>
+        <div class="thumb"></div>
+      </div>
+    </div>
+
+    <div class="info">
+      <div class="typ">Built Object · Solder-it-yourself · №07</div>
+      <h1 class="display" style="text-transform:none;">Desk Clock Kit</h1>
+      <div class="price">$64.00</div>
+      <p class="desc">An open-source desk clock you assemble yourself. Through-hole components, a laser-cut walnut frame, and a printed zine that walks you through every joint. No prior electronics experience needed — just a soldering iron and an afternoon.</p>
+
+      <table class="specs">
+        <tr><td>Includes</td><td>PCB, components, walnut frame, zine</td></tr>
+        <tr><td>Display</td><td>4-digit, warm-white</td></tr>
+        <tr><td>Power</td><td>USB-C · 5V</td></tr>
+        <tr><td>Build time</td><td>~2 hours</td></tr>
+        <tr><td>Files</td><td>Open-source (CC-BY-SA)</td></tr>
+      </table>
+
+      <div class="class-head">Medium — No. PPL·HW·007</div>
+      <div class="medium-row">
+        <div class="medium on"><span class="chk"><svg class="ico"><use href="#i-check"/></svg></span><svg class="ico"><use href="#i-physical"/></svg><span class="ml">Physical</span></div>
+        <div class="medium"><svg class="ico"><use href="#i-digital"/></svg><span class="ml">Digital</span></div>
+        <div class="medium"><svg class="ico"><use href="#i-hybrid"/></svg><span class="ml">Hybrid</span></div>
+      </div>
+
+      <div class="class-head">Domain Index</div>
+      <div class="domain-row">
+        <div class="domain on"><svg class="ico"><use href="#i-hw"/></svg><span class="dl">HW</span></div>
+        <div class="domain"><svg class="ico"><use href="#i-sw"/></svg><span class="dl">SW</span></div>
+        <div class="domain"><svg class="ico"><use href="#i-xr"/></svg><span class="dl">XR</span></div>
+        <div class="domain"><svg class="ico"><use href="#i-res"/></svg><span class="dl">RES</span></div>
+        <div class="domain"><svg class="ico"><use href="#i-pd"/></svg><span class="dl">PD</span></div>
+        <div class="domain"><svg class="ico"><use href="#i-life"/></svg><span class="dl">LIFE</span></div>
+      </div>
+
+      <div class="typ" style="margin-top:24px;">Frame finish</div>
+      <div class="opts">
+        <button class="on">Walnut</button>
+        <button>Maple</button>
+        <button>Black</button>
+      </div>
+
+      <div class="buy">
+        <div class="qty"><button>–</button><span class="n">1</span><button>+</button></div>
+        <button class="btn solid addcart">Add to cart — $64</button>
+      </div>
+      <div class="meta-line">✓ In stock · Ships in 2–4 days · Free shipping over $50</div>
+    </div>
+  </div>
+
+  <div class="rel-head">◆ You might also like</div>
+  <div class="rel">
+    <a href="product.html"><div class="card"><div class="sw"></div><div class="cap"><span>LED Matrix Sign</span><span>$58</span></div></div></a>
+    <a href="product.html"><div class="card"><div class="sw"></div><div class="cap"><span>PCB Bookmark</span><span>$12</span></div></div></a>
+    <a href="product.html"><div class="card"><div class="sw"></div><div class="cap"><span>Grid Notebook</span><span>$18</span></div></div></a>
+    <a href="product.html"><div class="card"><div class="sw"></div><div class="cap"><span>Riso Print №03</span><span>$38</span></div></div></a>
+  </div>
+</main>
+
+<footer>
+  <div><strong style="color:var(--ink);">PEN &amp; PAPER LABS©</strong><br>Made things, written down.</div>
+  <div><a href="shop.html">Shop</a><br><a href="blog.html">Journal</a><br><a href="about.html">Studio</a></div>
+  <div><a href="#">Instagram ↗</a><br><a href="#">GitHub ↗</a><br><a href="#">Newsletter ↗</a></div>
+  <div>© 2026 — All rights<br>reserved. Bilbao/BK.</div>
+</footer>
+</body>
+</html>

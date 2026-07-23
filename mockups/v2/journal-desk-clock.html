@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Designing a desk clock that anyone can solder — Pen &amp; Paper Labs</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="frame"></div>
+
+<svg class="svg-sprite" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+  <symbol id="i-hw" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="1.5"/><rect x="9.5" y="9.5" width="5" height="5" rx="0.6"/><path d="M9 6V3M12 6V3M15 6V3M9 21v-3M12 21v-3M15 21v-3M6 9H3M6 12H3M6 15H3M21 9h-3M21 12h-3M21 15h-3"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></symbol>
+</svg>
+
+<header class="nav">
+  <a class="brand" href="index.html"><span class="blink">✦</span><span>PEN &amp; PAPER LABS</span></a>
+  <nav class="links">
+    <a href="index.html">Index</a>
+    <a href="shop.html">Shop</a>
+    <a href="blog.html" class="active">Journal</a>
+    <a href="about.html">Studio</a>
+    <a href="shop.html" class="cart">Cart (0)</a>
+  </nav>
+</header>
+
+<div class="post-crumb"><a href="blog.html">Journal</a> / <a href="blog.html">Electronics</a> / Desk clock</div>
+
+<main>
+  <article>
+    <header class="post-head">
+      <span class="no">No. PPL·LOG·001</span>
+      <span class="cat"><svg class="ico"><use href="#i-hw"/></svg>Electronics</span>
+      <h1 class="display" style="text-transform:none;">Designing a desk clock that anyone can solder</h1>
+      <div class="meta"><span>2026·06·14</span><span>9 min read</span><span>By <b>John Meehan</b></span><span>Medium: <b>Physical</b></span><span>Domain: <b>HW</b></span></div>
+    </header>
+
+    <div class="post-hero"><span class="stamp">FIG.0 — Assembled unit, walnut frame</span></div>
+
+    <div class="post-body">
+      <p class="lead">I wanted a clock that looked like it belonged on a designer's desk, but that a total beginner could build in an afternoon. Those two goals fight each other constantly. Here is how I got them to agree.</p>
+
+      <p>Most beginner electronics kits look like beginner electronics kits — green boards, exposed headers, a rat's nest of jumper wires. Nothing wrong with that, but it's not something you'd leave out on a shelf. The brief for this project was simple to say and hard to do: a finished object first, a learning tool second.</p>
+
+      <h2><span class="idx">01</span>The constraint that shaped everything</h2>
+      <p>Every decision flowed from one rule: <code>no surface-mount soldering</code>. SMD parts are smaller and cheaper, but they're miserable for a first-timer. Sticking to through-hole components meant larger pads, more forgiving joints, and a board you can actually read. It also meant the enclosure had to hide a slightly chunkier board — which is where the walnut frame earns its keep.</p>
+
+      <blockquote>A kit should feel like assembling something real, not defusing a bomb.</blockquote>
+
+      <h2><span class="idx">02</span>The bill of materials</h2>
+      <p>I kept the parts count deliberately low. Fewer components means fewer chances to lose one on the floor, and a shorter, less intimidating build.</p>
+      <table class="bom">
+        <tr><th>Part</th><th>Detail</th><th>Qty</th></tr>
+        <tr><td>Microcontroller</td><td>ATmega, DIP-28, socketed</td><td>1</td></tr>
+        <tr><td>Display</td><td>4-digit, warm-white 7-seg</td><td>1</td></tr>
+        <tr><td>RTC module</td><td>Battery-backed, keeps time unplugged</td><td>1</td></tr>
+        <tr><td>Passives</td><td>Resistors, caps, one crystal</td><td>~14</td></tr>
+        <tr><td>Frame</td><td>Laser-cut walnut, 3 pieces</td><td>1</td></tr>
+      </table>
+
+      <h2><span class="idx">03</span>Where beginners actually get stuck</h2>
+      <p>Watching people build the first batch taught me more than any datasheet. The failures clustered in three places, so the printed zine now spends extra pages exactly there:</p>
+      <ul>
+        <li>Orientation of the DIP socket — the notch matters, and everyone ignores it once.</li>
+        <li>Cold joints on the display pins, which sit close together and cool fast.</li>
+        <li>Skipping the continuity check before first power-up, then panicking.</li>
+      </ul>
+      <p>Adding a single "stop and test here" checkpoint halfway through the build cut support emails roughly in half.</p>
+
+      <div class="figure">
+        <div class="box"><svg class="pico"><use href="#i-clock"/></svg></div>
+        <figcaption>FIG.1 — Board layout, through-hole only, socketed MCU</figcaption>
+      </div>
+
+      <h2><span class="idx">04</span>Open by default</h2>
+      <p>The board files, the frame vectors, and the firmware are all released under CC-BY-SA. If you'd rather source your own parts and cut your own frame, everything you need is public. The kit in the shop just saves you the sourcing — and funds the next design.</p>
+      <p>If you build one, I'd genuinely love to see it. Tag the studio or send a photo. Half the fun of open hardware is watching where it goes next.</p>
+    </div>
+
+    <nav class="post-nav">
+      <a href="journal-400-sheets.html"><span class="lbl">← Previous</span><span class="ttl">What I learned printing 400 sheets by hand</span></a>
+      <a href="journal-pricing.html"><span class="lbl">Next →</span><span class="ttl">Pricing handmade goods without losing your mind</span></a>
+    </nav>
+  </article>
+</main>
+
+<footer>
+  <div><strong style="color:var(--ink);">PEN &amp; PAPER LABS©</strong><br>Made things, written down.</div>
+  <div><a href="shop.html">Shop</a><br><a href="blog.html">Journal</a><br><a href="about.html">Studio</a></div>
+  <div><a href="#">Instagram ↗</a><br><a href="#">GitHub ↗</a><br><a href="#">Newsletter ↗</a></div>
+  <div>© 2026 — All rights<br>reserved. Bilbao/BK.</div>
+</footer>
+</body>
+</html>

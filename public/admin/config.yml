@@ -1,0 +1,29 @@
+# Decap CMS config. backend: git-gateway needs a Netlify site (Identity + Git
+# Gateway enabled) attached to this repo before it can authenticate — see
+# README.md for the manual setup steps. Fields mirror the schema in
+# src/content.config.ts; keep the two in sync if either changes.
+
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/images/journal"
+public_folder: "/images/journal"
+
+collections:
+  - name: "journal"
+    label: "Journal"
+    folder: "src/content/journal"
+    create: true
+    slug: "{{fields.slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string" }
+      - { label: "Date", name: "date", widget: "datetime" }
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options: ["Print", "Paper", "Electronics", "Process", "Shop notes"]
+      - { label: "Slug", name: "slug", widget: "string", hint: "Must match the filename and be URL-safe, e.g. desk-clock" }
+      - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "Author", name: "author", widget: "string", default: "John Meehan", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pen &amp; Paper Labs — Studio</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .hero {
+    padding: clamp(28px,6vw,80px) var(--gut) clamp(20px,3vw,40px);
+    border-bottom: 1px solid var(--line);
+  }
+  .hero .kick { font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--grey); }
+  .hero h1 { font-size: clamp(40px,8vw,110px); margin: 12px 0 0; }
+  .hero .lede { max-width: 60ch; font-size: clamp(18px,2.4vw,26px); line-height:1.3; margin-top: clamp(18px,3vw,34px); font-weight:500; }
+
+  .cols { display:grid; grid-template-columns: repeat(3,1fr); border-bottom:1px solid var(--line); }
+  .col { padding: clamp(20px,3vw,36px) var(--gut); border-right:1px solid var(--line); }
+  .col:last-child{ border-right:none; }
+  .col h2 { font-family:"SF Mono",Menlo,monospace; font-size:11px; text-transform:uppercase; letter-spacing:0.1em; color:var(--grey); margin:0 0 14px; }
+  .col p { margin: 0 0 14px; font-size:14px; }
+  .col ul { list-style:none; margin:0; padding:0; font-size:14px; }
+  .col li { padding:8px 0; border-bottom:1px solid var(--faint); display:flex; justify-content:space-between; }
+
+  .portrait {
+    aspect-ratio: 4/3; border-bottom:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center;
+    background-image: repeating-linear-gradient(45deg,#f1f1f1 0 14px,#fff 14px 28px);
+    position: relative;
+  }
+  .portrait .g { font-size: 90px; font-weight:800; opacity:0.12; }
+  .portrait .cap { position:absolute; bottom:14px; left:var(--gut); font-family:"SF Mono",Menlo,monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--grey); }
+
+  .ticker { display:grid; grid-template-columns: repeat(4,1fr); border-bottom:1px solid var(--line); }
+  .ticker > div { padding: clamp(18px,3vw,30px) var(--gut); border-right:1px solid var(--faint); }
+  .ticker > div:last-child{ border-right:none; }
+  .ticker .big { font-size: clamp(28px,4vw,46px); font-weight:800; letter-spacing:-0.02em; }
+  .ticker .lbl { font-family:"SF Mono",Menlo,monospace; font-size:10px; text-transform:uppercase; letter-spacing:0.08em; color:var(--grey); margin-top:6px; }
+
+  .contact { display:grid; grid-template-columns: 1fr 1fr; }
+  .contact > div { padding: clamp(20px,4vw,48px) var(--gut); }
+  .contact .l { border-right:1px solid var(--line); }
+  .contact h3 { font-size: clamp(28px,5vw,52px); margin:0 0 16px; line-height:0.95; }
+  .contact a.big { font-family:"SF Mono",Menlo,monospace; font-size:15px; }
+
+  @media (max-width:860px){
+    .cols{grid-template-columns:1fr;} .col{border-right:none;border-bottom:1px solid var(--line);}
+    .ticker{grid-template-columns:1fr 1fr;} .contact{grid-template-columns:1fr;} .contact .l{border-right:none;border-bottom:1px solid var(--line);}
+  }
+</style>
+</head>
+<body>
+<div class="frame"></div>
+
+<header class="nav">
+  <a class="brand" href="index.html"><span class="blink">✦</span><span>PEN &amp; PAPER LABS</span></a>
+  <nav class="links">
+    <a href="index.html">Index</a>
+    <a href="shop.html">Shop</a>
+    <a href="blog.html">Journal</a>
+    <a href="about.html" class="active">Studio</a>
+    <a href="shop.html" class="cart">Cart (0)</a>
+  </nav>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="kick">[ Studio / Colophon ]</div>
+    <h1 class="display">The Studio</h1>
+    <p class="lede">Pen &amp; Paper Labs is a one-person design studio working where ink meets circuitry. I make prints, paper goods, and small built objects — then document the whole process in the open.</p>
+  </section>
+
+  <div class="portrait"><span class="g">☻</span><span class="cap">Fig.0 — The bench, mid-project</span></div>
+
+  <div class="cols">
+    <div class="col">
+      <h2>◆ What this is</h2>
+      <p>Half journal, half shop. Every product here started as a post — a problem worked out in public, then turned into something you can hold.</p>
+      <p>Designs are released open-source where it makes sense, so you can remix, print, or build your own.</p>
+    </div>
+    <div class="col">
+      <h2>◆ What I make</h2>
+      <ul>
+        <li><span>Risograph prints</span><span class="mono">01</span></li>
+        <li><span>Notebooks &amp; cards</span><span class="mono">02</span></li>
+        <li><span>Solder kits</span><span class="mono">03</span></li>
+        <li><span>3D-printed objects</span><span class="mono">04</span></li>
+        <li><span>Type &amp; posters</span><span class="mono">05</span></li>
+      </ul>
+    </div>
+    <div class="col">
+      <h2>◆ Currently</h2>
+      <p>Working on a modular shelf-clock series and a zine on two-color printing.</p>
+      <p>Open to small collaborations and commissions. Slow to reply, but I always do.</p>
+      <span class="tag">Taking commissions</span>
+    </div>
+  </div>
+
+  <div class="ticker">
+    <div><div class="big">2026</div><div class="lbl">Established</div></div>
+    <div><div class="big">24</div><div class="lbl">Journal entries</div></div>
+    <div><div class="big">18</div><div class="lbl">Products shipped</div></div>
+    <div><div class="big">∞</div><div class="lbl">Prototypes binned</div></div>
+  </div>
+
+  <div class="contact">
+    <div class="l">
+      <h3 class="display" style="text-transform:none;">Say hello</h3>
+      <p style="max-width:34ch;">Questions, commissions, or just want to talk shop? Send a letter.</p>
+      <a class="btn solid" href="#">Write me ↗</a>
+    </div>
+    <div>
+      <h2 style="font-family:'SF Mono',Menlo,monospace;font-size:11px;text-transform:uppercase;letter-spacing:0.1em;color:var(--grey);margin:0 0 16px;">◆ Find me</h2>
+      <p><a class="big" href="#">hello@penandpaperlabs.com</a></p>
+      <p><a class="big" href="#">Instagram ↗</a></p>
+      <p><a class="big" href="#">GitHub ↗</a></p>
+      <p><a class="big" href="#">Newsletter ↗</a></p>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div><strong style="color:var(--ink);">PEN &amp; PAPER LABS©</strong><br>Made things, written down.</div>
+  <div><a href="shop.html">Shop</a><br><a href="blog.html">Journal</a><br><a href="about.html">Studio</a></div>
+  <div><a href="#">Instagram ↗</a><br><a href="#">GitHub ↗</a><br><a href="#">Newsletter ↗</a></div>
+  <div>© 2026 — All rights<br>reserved. Bilbao/BK.</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,77 @@
+---
+import Sprite from '../components/Sprite.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  active: 'Index' | 'Shop' | 'Journal' | 'Studio';
+  showTagline?: boolean;
+}
+
+const { title, active, showTagline = false } = Astro.props;
+
+const navLinks = [
+  { label: 'Index', href: '/' },
+  { label: 'Shop', href: '/shop' },
+  { label: 'Journal', href: '/journal' },
+  { label: 'Studio', href: '/about' },
+];
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{title}</title>
+</head>
+<body>
+<div class="frame"></div>
+
+<Sprite />
+
+<header class="nav">
+  <a class="brand" href="/">
+    <span class="blink">✦</span>
+    <span>PEN &amp; PAPER LABS</span>
+    {showTagline && <span class="tagline" style="color:var(--grey);font-weight:400;">EST. 2026</span>}
+  </a>
+  <nav class="links">
+    {navLinks.map((link) => (
+      <a href={link.href} class={link.label === active ? 'active' : undefined}>{link.label}</a>
+    ))}
+    <a href="/shop" class="cart" id="cartLink">Cart (0)</a>
+  </nav>
+</header>
+
+<slot />
+
+<footer>
+  <div><strong style="color:var(--ink);">PEN &amp; PAPER LABS©</strong><br>Made things, written down.</div>
+  <div><a href="/shop">Shop</a><br><a href="/journal">Journal</a><br><a href="/about">Studio</a></div>
+  <div><a href="#">Instagram ↗</a><br><a href="#">GitHub ↗</a><br><a href="#">Newsletter ↗</a></div>
+  <div>© 2026 — All rights<br>reserved. Bilbao/BK.</div>
+</footer>
+
+<script>
+  import { getCart, isCartConfigured } from '../lib/cart';
+
+  async function refreshCartLink() {
+    if (!isCartConfigured()) return;
+    const cartLink = document.getElementById('cartLink') as HTMLAnchorElement | null;
+    if (!cartLink) return;
+    try {
+      const cart = await getCart();
+      if (cart && cart.totalQuantity > 0) {
+        cartLink.textContent = `Cart (${cart.totalQuantity})`;
+        cartLink.href = cart.checkoutUrl;
+      }
+    } catch {
+      // Shopify unreachable/misconfigured — leave the static "Cart (0)" as-is.
+    }
+  }
+
+  refreshCartLink();
+  document.addEventListener('cart:updated', refreshCartLink);
+</script>
+</body>
+</html>

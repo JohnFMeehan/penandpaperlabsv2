@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pen &amp; Paper Labs — Index</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  /* ---- HERO ---- */
+  .hero {
+    border-bottom: 1px solid var(--line);
+    padding: clamp(28px, 6vw, 80px) var(--gut) clamp(20px, 4vw, 48px);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero .toprow {
+    display: flex; justify-content: space-between;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    font-size: 11px; color: var(--grey); margin-bottom: clamp(20px,5vw,60px);
+  }
+  .hero h1 {
+    font-size: clamp(58px, 19vw, 280px);
+  }
+  .hero h1 .amp { -webkit-text-stroke: 2px var(--ink); color: var(--paper); }
+  .hero .sub {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-top: clamp(18px, 3vw, 36px); gap: 24px; flex-wrap: wrap;
+  }
+  .hero .blurb { max-width: 38ch; font-size: 15px; }
+  .hero .ascii {
+    font-family: "SF Mono", Menlo, monospace; font-size: 10px; line-height: 1.1;
+    color: var(--grey); white-space: pre; user-select: none;
+  }
+  /* ---- TWO COLUMN: featured ---- */
+  .split { display: grid; grid-template-columns: 1.1fr 1fr; }
+  .split > section { border-right: 1px solid var(--line); }
+  .split > section:last-child { border-right: none; }
+  .panel-head {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 14px var(--gut); border-bottom: 1px solid var(--line);
+    text-transform: uppercase; letter-spacing: 0.08em; font-size: 11px;
+  }
+  .panel-head a { color: var(--grey); }
+  .panel-head a:hover { color: var(--ink); }
+
+  /* shop preview tiles */
+  .tiles { display: grid; grid-template-columns: 1fr 1fr; }
+  .tile { border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  .tile:nth-child(2n) { border-right: none; }
+  .tile a { display: block; padding: 0; }
+  .swatch {
+    aspect-ratio: 1 / 1; display: flex; align-items: center; justify-content: center;
+    border-bottom: 1px solid var(--faint);
+    background-image: repeating-linear-gradient(45deg,#f4f4f4 0 10px,#fff 10px 20px);
+    position: relative;
+  }
+  .swatch.b { background-image: repeating-linear-gradient(0deg,#f0f0f0 0 6px,#fff 6px 12px); }
+  .swatch.c { background-image: radial-gradient(circle at 50% 50%, #e8e8e8 0 30%, #fff 31%); }
+  .swatch.d { background-image: repeating-linear-gradient(90deg,#eee 0 2px,#fff 2px 14px); }
+  .swatch .glyph { font-size: 56px; font-weight: 800; opacity: 0.14; }
+  .tile .cap {
+    display: flex; justify-content: space-between; padding: 10px 14px;
+    font-family: "SF Mono", Menlo, monospace; font-size: 11px; text-transform: uppercase;
+  }
+  .tile:hover .swatch { background: var(--ink); }
+  .tile:hover .glyph { color: var(--paper); opacity: 0.9; }
+
+  /* blog list preview */
+  .post {
+    display: grid; grid-template-columns: 64px 1fr auto; gap: 16px;
+    padding: 13px var(--gut); border-bottom: 1px solid var(--faint);
+    align-items: baseline;
+  }
+  .post:hover { background: #fafafa; }
+  .post .num { font-family: "SF Mono",Menlo,monospace; font-size: 11px; color: var(--grey); }
+  .post .ttl { font-size: 15px; }
+  .post .dt { font-family: "SF Mono",Menlo,monospace; font-size: 11px; color: var(--grey); white-space: nowrap; }
+
+  /* marquee strip */
+  .strip {
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+    overflow: hidden; white-space: nowrap; background: var(--ink); color: var(--paper);
+  }
+  .strip .run {
+    display: inline-block; padding: 11px 0;
+    font-family: "SF Mono",Menlo,monospace; font-size: 12px; text-transform: uppercase;
+    letter-spacing: 0.1em; animation: scroll 26s linear infinite;
+  }
+  .strip .run span { padding: 0 28px; }
+  @keyframes scroll { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+  @media (max-width: 860px){
+    .split { grid-template-columns: 1fr; }
+    .split > section { border-right:none; border-bottom:1px solid var(--line); }
+    .hero h1 .amp { -webkit-text-stroke: 1px var(--ink); }
+  }
+</style>
+</head>
+<body>
+<div class="frame"></div>
+
+<header class="nav">
+  <a class="brand" href="index.html">
+    <span class="blink">✦</span>
+    <span>PEN &amp; PAPER LABS</span>
+    <span class="tagline" style="color:var(--grey);font-weight:400;">EST. 2026</span>
+  </a>
+  <nav class="links">
+    <a href="index.html" class="active">Index</a>
+    <a href="shop.html">Shop</a>
+    <a href="blog.html">Journal</a>
+    <a href="about.html">Studio</a>
+    <a href="shop.html" class="cart">Cart (0)</a>
+  </nav>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="toprow">
+      <span>[ Brooklyn / Internet ]</span>
+      <span>Prints · Paper Goods · Built Objects</span>
+      <span>27.06.26 — 10:00H</span>
+    </div>
+    <h1 class="display">PEN<span class="amp">&amp;</span>PAPER</h1>
+    <div class="sub">
+      <p class="blurb">A studio &amp; shop for things made with ink, paper, and a soldering iron. We design prints, stationery, and small built objects — and write about how they come to be.</p>
+      <pre class="ascii">  ┌───────────┐
+  │ ▟ ▙ ▟ ▙ ▟ │
+  │ MAKE/WRITE │
+  │ ▜ ▛ ▜ ▛ ▜ │
+  └───────────┘</pre>
+    </div>
+  </section>
+
+  <!-- MARQUEE -->
+  <div class="strip">
+    <div class="run">
+      <span>NEW DROP — RISO PRINT SERIES №03</span><span>·</span><span>NOTEBOOK RESTOCK</span><span>·</span><span>OPEN-SOURCE DESK CLOCK KIT</span><span>·</span><span>FREE SHIPPING OVER $50</span><span>·</span>
+      <span>NEW DROP — RISO PRINT SERIES №03</span><span>·</span><span>NOTEBOOK RESTOCK</span><span>·</span><span>OPEN-SOURCE DESK CLOCK KIT</span><span>·</span><span>FREE SHIPPING OVER $50</span><span>·</span>
+    </div>
+  </div>
+
+  <!-- SPLIT: shop + journal -->
+  <div class="split">
+    <section>
+      <div class="panel-head">
+        <span>◆ From the Shop</span>
+        <a href="shop.html">All products →</a>
+      </div>
+      <div class="tiles">
+        <div class="tile"><a href="product.html">
+          <div class="swatch a"><span class="glyph">▲</span></div>
+          <div class="cap"><span>Riso Print №03</span><span>$38</span></div>
+        </a></div>
+        <div class="tile"><a href="product.html">
+          <div class="swatch b"><span class="glyph">▤</span></div>
+          <div class="cap"><span>Grid Notebook</span><span>$18</span></div>
+        </a></div>
+        <div class="tile"><a href="product.html">
+          <div class="swatch c"><span class="glyph">◉</span></div>
+          <div class="cap"><span>Desk Clock Kit</span><span>$64</span></div>
+        </a></div>
+        <div class="tile"><a href="product.html">
+          <div class="swatch d"><span class="glyph">✚</span></div>
+          <div class="cap"><span>Type Poster A1</span><span>$45</span></div>
+        </a></div>
+      </div>
+    </section>
+
+    <section>
+      <div class="panel-head">
+        <span>◆ From the Journal</span>
+        <a href="blog.html">All entries →</a>
+      </div>
+      <a href="blog.html"><div class="post"><span class="num">→01</span><span class="ttl">Designing a desk clock that anyone can solder</span><span class="dt">2026·06·14</span></div></a>
+      <a href="blog.html"><div class="post"><span class="num">→02</span><span class="ttl">What I learned printing 400 sheets by hand</span><span class="dt">2026·05·30</span></div></a>
+      <a href="blog.html"><div class="post"><span class="num">→03</span><span class="ttl">Choosing paper stock for risograph</span><span class="dt">2026·05·11</span></div></a>
+      <a href="blog.html"><div class="post"><span class="num">→04</span><span class="ttl">A grid system for the whole shop</span><span class="dt">2026·04·22</span></div></a>
+      <a href="blog.html"><div class="post"><span class="num">→05</span><span class="ttl">From sketchbook to product, end to end</span><span class="dt">2026·04·03</span></div></a>
+      <a href="blog.html"><div class="post" style="border-bottom:none;"><span class="num">→06</span><span class="ttl">Building this site as a brutalist grid</span><span class="dt">2026·03·19</span></div></a>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div>
+    <strong style="color:var(--ink);">PEN &amp; PAPER LABS©</strong><br>
+    Made things, written down.
+  </div>
+  <div>
+    <a href="shop.html">Shop</a><br>
+    <a href="blog.html">Journal</a><br>
+    <a href="about.html">Studio</a>
+  </div>
+  <div>
+    <a href="#">Instagram ↗</a><br>
+    <a href="#">GitHub ↗</a><br>
+    <a href="#">Newsletter ↗</a>
+  </div>
+  <div>
+    © 2026 — All rights<br>
+    reserved. Bilbao/BK.
+  </div>
+</footer>
+</body>
+</html>
