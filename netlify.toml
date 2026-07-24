@@ -1,0 +1,10 @@
+# This Netlify site is only used for Identity + Git Gateway (Decap CMS auth)
+# — the real site is hosted on IONOS via .github/workflows/deploy.yml. Netlify
+# still needs to build successfully at least once for Identity to work at all,
+# so pin the settings explicitly instead of relying on auto-detection.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
