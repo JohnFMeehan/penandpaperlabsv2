@@ -23,6 +23,27 @@ const navLinks = [
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{title}</title>
+<!-- Netlify Identity invite/recovery links land on the site root (this layout),
+     not on /admin — the widget has to be present here to catch the
+     #invite_token=/#recovery_token= hash and pop up its set-password modal.
+     is:inline keeps these as plain, unprocessed, in-order scripts, since the
+     widget relies on window.netlifyIdentity existing by the time the second
+     script runs. -->
+<script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script is:inline>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.init({
+      APIUrl: 'https://tranquil-meerkat-859b5a.netlify.app/.netlify/identity',
+    });
+    window.netlifyIdentity.on('init', (user) => {
+      if (!user) {
+        window.netlifyIdentity.on('login', () => {
+          document.location.href = '/admin/';
+        });
+      }
+    });
+  }
+</script>
 </head>
 <body>
 <div class="frame"></div>
