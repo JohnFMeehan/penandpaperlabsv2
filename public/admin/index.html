@@ -4,14 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Content Admin — Pen &amp; Paper Labs</title>
-  <!-- Requires a Netlify site (Identity + Git Gateway enabled) pointed at this
-       repo before login will work — see README.md. Not configured yet. -->
+  <!-- This admin page is served from the real site's domain, not from Netlify
+       itself, so the Identity widget needs to be told explicitly which
+       Netlify site's Identity service to talk to (it can't auto-detect that
+       across domains). Update APIUrl if the Netlify site is ever recreated. -->
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-</head>
-<body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
   <script>
     if (window.netlifyIdentity) {
+      window.netlifyIdentity.init({
+        APIUrl: 'https://tranquil-meerkat-859b5a.netlify.app/.netlify/identity',
+      });
       window.netlifyIdentity.on('init', (user) => {
         if (!user) {
           window.netlifyIdentity.on('login', () => {
@@ -21,5 +23,8 @@
       });
     }
   </script>
+</head>
+<body>
+  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
 </body>
 </html>
