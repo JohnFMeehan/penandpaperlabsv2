@@ -1,6 +1,7 @@
 # Dormant until this repo has a GitHub remote and the secrets below are set
 # (Settings → Secrets and variables → Actions). See README.md for the full
-# checklist. FTP_SERVER/USERNAME/PASSWORD are IONOS hosting credentials;
+# checklist. FTP_SERVER/USERNAME/PASSWORD are IONOS hosting credentials (used
+# here over SFTP — IONOS has plain FTP disabled, SFTP-only);
 # the PUBLIC_SHOPIFY_* secrets are optional and only needed once the store exists.
 name: Build and deploy
 
@@ -33,11 +34,13 @@ jobs:
           PUBLIC_SHOPIFY_STORE_DOMAIN: ${{ secrets.PUBLIC_SHOPIFY_STORE_DOMAIN }}
           PUBLIC_SHOPIFY_STOREFRONT_TOKEN: ${{ secrets.PUBLIC_SHOPIFY_STOREFRONT_TOKEN }}
 
-      - name: Deploy to IONOS via FTP
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+      - name: Deploy to IONOS via SFTP
+        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./dist/
-          server-dir: /penandpaperlabs/
+          port: 22
+          local_path: './dist/*'
+          remote_path: '/penandpaperlabs'
+          sftp_only: true
