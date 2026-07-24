@@ -6,7 +6,7 @@ const journal = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
-    category: z.enum(['Print', 'Paper', 'Electronics', 'Process', 'Shop notes']),
+    category: z.enum(['Print', 'Paper', 'Electronics', 'Software', 'Process', 'Shop notes']),
     slug: z.string(),
     image: z.string().optional(),
     author: z.string().default('John Meehan'),

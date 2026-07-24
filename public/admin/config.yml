@@ -22,7 +22,7 @@ collections:
       - label: "Category"
         name: "category"
         widget: "select"
-        options: ["Print", "Paper", "Electronics", "Process", "Shop notes"]
+        options: ["Print", "Paper", "Electronics", "Software", "Process", "Shop notes"]
       - { label: "Slug", name: "slug", widget: "string", hint: "Must match the filename and be URL-safe, e.g. desk-clock" }
       - { label: "Image", name: "image", widget: "image", required: false }
       - { label: "Author", name: "author", widget: "string", default: "John Meehan", required: false }

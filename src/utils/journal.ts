@@ -4,6 +4,7 @@ export const categoryIcon: Record<string, string> = {
   Print: 'i-print',
   Paper: 'i-note',
   Electronics: 'i-hw',
+  Software: 'i-sw',
   Process: 'i-process',
   'Shop notes': 'i-tag',
 };
