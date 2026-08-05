@@ -11,9 +11,20 @@
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <script>
     if (window.netlifyIdentity) {
-      window.netlifyIdentity.init({
-        APIUrl: 'https://tranquil-meerkat-859b5a.netlify.app/.netlify/identity',
-      });
+      // The widget auto-runs init() with NO options at DOMContentLoaded, which
+      // resets APIUrl to the default (current origin). Our init must run after
+      // that auto-init or it gets clobbered — the widget registered its
+      // DOMContentLoaded listener first, so ours is guaranteed to fire later.
+      const initIdentity = () => {
+        window.netlifyIdentity.init({
+          APIUrl: 'https://tranquil-meerkat-859b5a.netlify.app/.netlify/identity',
+        });
+      };
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initIdentity);
+      } else {
+        initIdentity();
+      }
       window.netlifyIdentity.on('init', (user) => {
         if (!user) {
           window.netlifyIdentity.on('login', () => {
