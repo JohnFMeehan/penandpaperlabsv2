@@ -6,6 +6,11 @@
 backend:
   name: git-gateway
   branch: main
+  # The admin page is served from penandpaperlabs.com, not the Netlify domain,
+  # so the backend can't find Identity/Git Gateway on the current origin —
+  # point it at the Netlify site explicitly (same reason as in index.html).
+  identity_url: https://tranquil-meerkat-859b5a.netlify.app/.netlify/identity
+  gateway_url: https://tranquil-meerkat-859b5a.netlify.app/.netlify/git
 
 media_folder: "public/images/journal"
 public_folder: "/images/journal"
